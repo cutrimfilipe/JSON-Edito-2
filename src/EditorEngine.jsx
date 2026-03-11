@@ -75,18 +75,15 @@ function RichEditable({ html, footnotes, onChange, style = {} }) {
   fnRef.current = footnotes;
 
   useEffect(() => {
-    if (!ref.current || html === local.current) return;
-    ref.current.innerHTML = injectFn(html, fnRef.current);
-    local.current = html;
-  }, [html]);
-
-  useEffect(() => {
-    if (ref.current) ref.current.innerHTML = injectFn(local.current, footnotes);
-  }, [footnotes]);
-
-  useEffect(() => {
     if (ref.current) ref.current.innerHTML = injectFn(html, fnRef.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (!ref.current) return;
+    ref.current.innerHTML = injectFn(html, footnotes);
+    local.current = html;
+  }, [html, footnotes]);
 
   const onInput = useCallback(() => {
     if (!ref.current) return;
